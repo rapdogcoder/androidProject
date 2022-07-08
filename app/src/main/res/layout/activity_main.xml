@@ -42,7 +42,7 @@
             android:layout_height="80dp"
             android:layout_margin="50dp"
             android:backgroundTint="#8BC34A"
-            android:onClick="@{() -> viewmodel.record()}"
+            android:onClick="@{() -> viewmodel.addRecord()}"
             android:padding="20dp"
             android:text="기록"
             android:textSize="16sp"

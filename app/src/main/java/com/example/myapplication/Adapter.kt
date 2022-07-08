@@ -6,31 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.databinding.ItemRecordBinding
 
-class Adapter(val list: List<Record>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
-    lateinit var recordList : List<Record>
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val minutetext: TextView
-        val secondtext: TextView
-        val millistext: TextView
+class Adapter(private var list: List<Record>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
-        init{
-            minutetext = itemView.findViewById(R.id.tv_minute3)
-            secondtext = itemView.findViewById(R.id.tv_second3)
-            millistext = itemView.findViewById(R.id.tv_millisecond3)
-        }
+    init {
+        list = list.reversed()
     }
 
+    class ViewHolder(val binding: ItemRecordBinding) : RecyclerView.ViewHolder(binding.root)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_record,parent,false)
+        val view = ItemRecordBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.minutetext.text=list[position].minute
-        holder.secondtext.text=list[position].second
-        holder.millistext.text=list[position].milisec
+        holder.binding.tvMinute3.text = list[position].minute
+        holder.binding.tvSecond3.text = list[position].second
+        holder.binding.tvMillisecond3.text = list[position].milisec
     }
 
     override fun getItemCount() = list.size
+
+    fun updateList(list: List<Record>){
+        this.list = list.reversed()
+        notifyDataSetChanged()
+    }
 }

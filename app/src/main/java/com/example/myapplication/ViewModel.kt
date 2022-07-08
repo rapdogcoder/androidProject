@@ -1,6 +1,7 @@
 package com.example.myapplication
 import android.content.ClipData
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
@@ -9,18 +10,17 @@ import kotlin.concurrent.timer
 
 
 class ViewModel : ViewModel() {
-    val minuteCount = MutableLiveData<String>().apply {
-        value = "00"
-    }
-    val secondCount = MutableLiveData<String>().apply {
-        value = ":00"
-    }
-    val milliCount = MutableLiveData<String>().apply {
-        value = ".00"
-    }
-    val timerString = MutableLiveData<String>().apply {
-        value = "시작"
-    }
+
+    private val list = mutableListOf<Record>()
+    private val _recordList = MutableLiveData<List<Record>>(list)
+    val recordList: LiveData<List<Record>>
+        get() = _recordList
+
+    val minuteCount = MutableLiveData("00")
+    val secondCount = MutableLiveData(":00")
+    val milliCount = MutableLiveData(".00")
+    val timerString = MutableLiveData("시작")
+
     var isRunning = false
     private var time = 0
     var timer : Timer? = null
@@ -67,11 +67,18 @@ class ViewModel : ViewModel() {
         milliCount.postValue(".00")
         secondCount.postValue(":00")
         minuteCount.postValue("00")
-    }
-    fun record(){
-
+        clearRecord()
     }
 
+    fun addRecord(){
+        val record = Record(minuteCount.value!!, secondCount.value!!, milliCount.value!!)
+        list.add(record)
+        _recordList.value = list
+    }
 
+    private fun clearRecord(){
+        list.clear()
+        _recordList.value = list
+    }
 
 }
