@@ -11,31 +11,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(){
-    private val viewModel : ViewModel by viewModels()
 
+    private val viewModel : ViewModel by viewModels()
     private lateinit var binding : ActivityMainBinding
+
+    private lateinit var adapter: Adapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
         binding.viewmodel= viewModel
         binding.lifecycleOwner = this
-    val RecordList = findViewById<RecyclerView>(R.id.recordlist)
-    val adapter = Adapter(getRecordList())
 
-        RecordList.layoutManager = LinearLayoutManager(this)
-        RecordList.adapter = adapter
+        adapter = Adapter(viewModel.recordList.value!!)
+
+        binding.recordlist.also {
+            it.layoutManager = LinearLayoutManager(this)
+            it.adapter = adapter
+        }
+
+        viewModel.recordList.observe(this){
+            adapter.updateList(it)
+        }
 
 
     }
-    fun getRecordList() : List<Record> {
-        val recordList = listOf(
-            Record("00", ":00", ".00"),
-            Record("00", ":00", ".00"),
-            Record("00", ":00", ".00"),
-            Record("00", ":00", ".00"),
-            Record("00", ":00", ".00"),
-        )
-        return recordList
-    }
+
 }
