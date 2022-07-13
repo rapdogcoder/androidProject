@@ -1,5 +1,9 @@
 package com.example.myapplication
+import android.app.PendingIntent.getService
 import android.content.ClipData
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.os.IBinder
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +24,7 @@ class ViewModel : ViewModel() {
     val secondCount = MutableLiveData(":00")
     val milliCount = MutableLiveData(".00")
     val timerString = MutableLiveData("시작")
+
 
     var isRunning = false
     private var time = 0
